@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  teamspeak:
+    container_name: teamspeak3server
+    image: teamspeak
+    restart: unless-stopped
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+    environment:
+      TS3SERVER_LICENSE: accept
+    volumes:
+      - ts3server-data:/var/ts3server/
+      
+volumes:
+  ts3server-data:
+      
+networks:
+  default:
+    external: true
+    name: int-docker-net

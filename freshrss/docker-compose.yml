@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  freshrss:
+    container_name: freshrss
+    image: freshrss/freshrss:latest
+    restart: unless-stopped
+    expose:
+      - 80
+    volumes:
+      - freshrss-data:/var/www/FreshRSS/data
+      - freshrss-data:/var/www/FreshRSS/extensions
+    environment:
+      - "TZ=Europe/Berlin"
+      - "CRON_MIN=1,31"
+
+volumes:
+  freshrss-data:
+
+networks:
+  default:
+    external: true
+    name: int-docker-net

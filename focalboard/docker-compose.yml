@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  focalboard:
+    container_name: focalboard
+    image: mattermost/focalboard
+    restart: unless-stopped
+    expose:
+      - 8000
+    volumes:
+      - focalboard-data:/opt/focalboard/data
+    environment:
+      TZ: 'Europe/Berlin'
+
+volumes:
+  focalboard-data:
+
+networks:
+  default:
+    external: true
+    name: int-docker-net

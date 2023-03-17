@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  whiteboard:
+    container_name: whiteboard
+    image: lovasoa/wbo
+    restart: unless-stopped
+    expose:
+      - 80
+    volumes:
+      - wbo-data:/opt/app/server-data
+
+volumes:
+  wbo-data:
+
+networks:
+  default:
+    external: true
+    name: int-docker-net

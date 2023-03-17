@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  authelia:
+    container_name: authelia
+    image: authelia/authelia
+    restart: unless-stopped
+    expose:
+      - 9091
+    volumes:
+      # set location for config files
+      - /etc/authelia:/config
+      # set location for log files, to be read by fail2ban
+      - /var/log/authelia:/var/log/authelia
+    environment:
+      TZ: 'Europe/Berlin'
+      
+  redis:
+    container_name: authelia-redis
+    image: redis:alpine
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - /etc/authelida-redis:/data
+    environment:
+      TZ: 'Europe/Berlin'
+
+networks:
+  default:
+     external: true
+     name: int-docker-net

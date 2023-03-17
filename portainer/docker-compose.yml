@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/portainer/data:/data
+
+networks:
+  default:
+    external: true
+    name: int-docker-net
