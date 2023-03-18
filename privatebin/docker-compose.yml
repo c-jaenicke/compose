@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  privatebin:
+    container_name: privatebin
+    image: privatebin/nginx-fpm-alpine
+    restart: unless-stopped
+    expose:
+      - 8080
+    read_only: true
+    volumes:
+      - privatebin-data:/srv/data
+      - /etc/privatebin/cfg:/srv/cfg
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.privatebin.entrypoints=websecure
+      - traefik.http.routers.privatebin.rule=Host(`<DOMAIN HERE>`)
+      - traefik.http.routers.privatebin.tls=true
+      - traefik.http.routers.privatebin.tls.certresolver=production
+      #- traefik.http.routers.privatebin.middlewares=authelia@file
+
+volumes:
+  privatebin-data:
+    driver: local
+    driver_opts:
+      o: "size=100G"
+      device: tmpfs
+      type: tmpfs
+      
+networks:
+  default:
+     external: true
+     name: int-docker-net

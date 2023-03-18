@@ -1,0 +1,14 @@
+##########################################################################
+# AUTHELIA USER DATABASE
+# https://www.authelia.com/configuration/first-factor/file/
+# https://github.com/authelia/authelia/blob/master/internal/authentication/users_database.template.yml
+##########################################################################
+users:
+  <NAME HERE>:
+    displayname: "<USERNAME HERE>"
+    #hash using docker run authelia/authelia:latest YOURNAME hash-password SOMEPASSWORD
+    password: "$argon2id$v=<HASHED PASSWORD HERE>"
+    email: <EMAIL HERE>
+    groups:
+      - admins
+      - dev
