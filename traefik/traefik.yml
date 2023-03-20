@@ -44,6 +44,11 @@ entryPoints:
   websecure:
     address: ":443"
 
+  # METRICS
+  # to be scraped by Prometheus
+  metrics:
+    address: ":8081"
+
 # MIDDLEWARES
 http:
   middlewares:
@@ -113,3 +118,13 @@ providers:
     # watch for dynamic configuration changes
     directory: /etc/traefik
     watch: true
+
+# METRICS
+# https://doc.traefik.io/traefik/observability/metrics/overview/
+## PROMETHEUS
+metrics:
+  prometheus:
+    entryPoint: metrics
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
