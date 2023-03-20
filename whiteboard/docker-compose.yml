@@ -1,3 +1,8 @@
+# WHITEBOARD DOCKER COMPOSE
+# Deploys whiteboard
+# Joins internal docker network
+# Whiteboard:
+#   data:   VOLUME wbo-data
 version: '3.8'
 
 services:

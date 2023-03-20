@@ -1,3 +1,8 @@
+# TEAMSPEAK SERVER DOCKER COMPOSE
+# Deploys teamspeak server
+# Joins internal docker network
+# Teamspeak:
+#   data:   VOLUME ts3server-data
 version: '3.8'
 
 services:

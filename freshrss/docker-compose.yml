@@ -1,3 +1,8 @@
+# FRESHRSS DOCKER COMPOSE
+# Deploys freshrss
+# Joins internal docker network
+# Freshrss:
+#   data:   VOLUME freshrss-data
 version: '3.8'
 
 services:

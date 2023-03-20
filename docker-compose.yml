@@ -1,0 +1,28 @@
+# <SERIVCE NAME> COMPOSE
+# Deploys <SERVICES>
+# Joins internal docker network
+# <SERVICE NAME>:
+#   <PURPOSE>:  <MOUNT>
+version: '3.8'
+
+services:
+  <SERVICE NAME>:
+    container_name: <CONTAINER NAME>
+    image: <IMAGE>
+    restart: unless-stopped
+    expose:
+      - <PORT>
+    volumes:
+      - <VOLUME MOUNTS>
+    environment:
+      TZ: 'Europe/Berlin'
+
+# save data for service in volume
+volumes:
+  <SERVICE NAME>-data:
+
+# join existing network for all containers
+networks:
+  default:
+     external: true
+     name: int-docker-net

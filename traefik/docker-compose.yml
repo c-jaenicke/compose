@@ -1,3 +1,9 @@
+# TRAEFIK PROXY DOCKER COMPOSE
+# Deploys treafik PROXY
+# Joins internal docker network
+# Treafik:
+#   data:   /etc/traefik/
+#   docker: /var/run/docker.sock
 version: '3'
 
 services:

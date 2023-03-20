@@ -1,3 +1,11 @@
+# AUTHELIA DOCKER COMPOSE
+# Deploys authelia service and redis
+# Joins internal docker network
+# Authelia:
+#   config  /etc/authelia
+#   logs:   /var/logs/authelia
+# Redis:
+#   data:   VOLUME authelia-redis
 version: '3.8'
 
 services:
@@ -22,9 +30,12 @@ services:
     expose:
       - 6379
     volumes:
-      - /etc/authelida-redis:/data
+      - authelia-redis:/data
     environment:
       TZ: 'Europe/Berlin'
+
+volumes:
+  authelia-redis:
 
 networks:
   default:

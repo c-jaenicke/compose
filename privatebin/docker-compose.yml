@@ -1,3 +1,10 @@
+# PRIVATEBIN DOCKER COMPOSE
+# Deploys privatebin
+# Joins internal docker network
+# Privatebin:
+#   data:   VOLUME privatebin-data
+#     limited to 100G size
+#   config: /etc/privatebin/
 version: '3.8'
 
 services:
@@ -11,13 +18,8 @@ services:
     volumes:
       - privatebin-data:/srv/data
       - /etc/privatebin/cfg:/srv/cfg
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.privatebin.entrypoints=websecure
-      - traefik.http.routers.privatebin.rule=Host(`<DOMAIN HERE>`)
-      - traefik.http.routers.privatebin.tls=true
-      - traefik.http.routers.privatebin.tls.certresolver=production
-      #- traefik.http.routers.privatebin.middlewares=authelia@file
+    environment:
+      - "TZ=Europe/Berlin"
 
 volumes:
   privatebin-data:

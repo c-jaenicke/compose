@@ -1,3 +1,8 @@
+# FOCALBOARD DOCKER COMPOSE
+# Deploys focalboard
+# Joins internal docker network
+# Focalboard:
+#   data:   VOLUME focalboard-data
 version: '3.8'
 
 services:

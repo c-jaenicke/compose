@@ -1,3 +1,8 @@
+# CHANGEDETECTION DOCKER COMPOSE
+# Deploys changedetection
+# Joins internal docker network
+# Changedetection:
+#   data:   VOLUME changedetection-data
 version: '3.8'
 
 services:

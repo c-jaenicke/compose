@@ -1,3 +1,10 @@
+# PORTAINER DOCKER COMPOSE
+# Deploys portainer
+# Joins internal docker network
+# Portainer:
+#   data:   /etc/portainer
+#   time:   /etc/localtime/
+#   docker: /var/run/docker.sock
 version: '3.8'
 
 services:

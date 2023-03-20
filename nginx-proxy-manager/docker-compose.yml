@@ -1,3 +1,8 @@
+# NGINX PROXY MANAGER DOCKER COMPOSE
+# Deploys nginx proxy manager
+# Joins internal docker network
+# Nginx:
+#   data:   /etc/nginx-pm/
 version: '3.8'
 
 services:
@@ -12,6 +17,8 @@ services:
     volumes:
       - /etc/nginx-pm/data:/data
       - /etc/nginx-pm/letsencrypt:/etc/letsencrypt
+    environment:
+      - "TZ=Europe/Berlin"
 
 networks:
   default:

@@ -1,3 +1,11 @@
+# GRAFANA DOCKER COMPOSE
+# Deploys grafana, prometheus, optionally postgres exporter
+# Joins internal docker network
+# Creates internal grafana network
+# Grafana:
+#   data:   VOLUME grafana-data
+# Prometheus:
+#   config: /etc/prometheus/prometheus.yml
 version: '3.8'
 
 services:
@@ -41,11 +49,11 @@ services:
 #      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_ADDRESS}:5432/${POSTGRES_DB}?sslmode=disable
 #      - "TZ=Europe/Berlin"
 
+volumes:
+  grafana-data:
+
 networks:
   default:
      external: true
      name: int-docker-net
   int-grafana-net:
-
-volumes:
-  grafana-data:
