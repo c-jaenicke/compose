@@ -46,12 +46,9 @@ services:
 volumes:
   # limit image volume to 100GB
   mediawiki-images:
-    driver: local
-    driver_opts:
-      o: "size=100G"
-      device: tmpfs
-      type: tmpfs
+    name: mediawiki-images
   mediawiki-db:
+    name: mediawiki-db
 
 networks:
   default:
