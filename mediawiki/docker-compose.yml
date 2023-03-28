@@ -44,7 +44,6 @@ services:
       - traefik.http.routers.<NAME>.entrypoints=web
 
 volumes:
-  # limit image volume to 100GB
   mediawiki-images:
     name: mediawiki-images
   mediawiki-db:
