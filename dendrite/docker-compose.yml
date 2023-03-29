@@ -15,7 +15,7 @@ services:
     image: postgres:14
     restart: unless-stopped
     volumes:
-      - /etc/dendrite/postgres/create_db.sh:/docker-entrypoint-initdb.d/20-create_db.sh
+      - /etc/dendrite/create_db.sh:/docker-entrypoint-initdb.d/20-create_db.sh
       - /etc/dendrite/postgres:/var/lib/postgresql/data
     environment:
       # possibly change username, make sure to update config too
