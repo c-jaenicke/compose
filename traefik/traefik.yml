@@ -113,7 +113,11 @@ providers:
   docker:
     # Dont expose containers by default, containers requires labels to be exposed
     # See https://doc.traefik.io/traefik/providers/docker/#routing-configuration-with-labels
-    exposedByDefault: false # Default is true
+    exposedByDefault: false
+    # Set default network for exposed containers
+    # If not set, traefik will choose a random network the container is in to route to it!
+    # Possibly <CHANGE NETWORK NAME HERE>
+    network: int-docker-net
   file:
     # watch for dynamic configuration changes
     directory: /etc/traefik
