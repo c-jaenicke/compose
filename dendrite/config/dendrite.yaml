@@ -166,6 +166,8 @@ client_api:
 
   # If set, allows registration by anyone who knows the shared secret, regardless
   # of whether registration is otherwise disabled.
+  # HAVE TO SET ONE EVEN WHEN USING SCRIPT TO ADD USERS
+  # <SET SECRET HERE>
   registration_shared_secret: ""
 
   # Whether to require reCAPTCHA for registration. If you have enabled registration
