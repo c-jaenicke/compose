@@ -1,0 +1,35 @@
+# IT-TOOLS COMPOSE
+# Deploys it-tools
+# Joins internal docker network
+version: '3.8'
+
+services:
+  tool:
+    container_name: it-tools
+    image: corentinth/it-tools:latest
+    restart: unless-stopped
+    expose:
+      - 8080
+    environment:
+      TZ: 'Europe/Berlin'
+#    labels:
+    # enable treafik discovery
+#      - traefik.enable=true
+    # set entrypoint to http
+#      - traefik.http.routers.<NAME>.entrypoints=web
+    # set entrypoint to https
+#      - traefik.http.routers.<NAME>.entrypoints=websecure
+    # bind domain
+#      - traefik.http.routers.<NAME>.rule=Host(`<DOMAIN>`)
+    # enable tls
+#      - traefik.http.routers.<NAME>.tls=true
+    # set cert server
+#      - traefik.http.routers.<NAME>.tls.certresolver=production
+    # enable authelia for service, make sure service is in authelia config
+#      - traefik.http.routers.changedetection.middlewares=authelia@file
+
+# join existing network for all containers
+networks:
+  default:
+     external: true
+     name: int-docker-net
