@@ -1,4 +1,5 @@
 # TEAMSPEAK SERVER DOCKER COMPOSE
+# https://hub.docker.com/_/teamspeak
 # Deploys teamspeak server
 # Joins internal docker network
 # Teamspeak:

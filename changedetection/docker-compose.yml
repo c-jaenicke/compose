@@ -1,4 +1,5 @@
 # CHANGEDETECTION DOCKER COMPOSE
+# https://github.com/dgtlmoon/changedetection.io
 # Deploys changedetection
 # Joins internal docker network
 # Changedetection:

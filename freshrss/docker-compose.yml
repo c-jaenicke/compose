@@ -1,4 +1,5 @@
 # FRESHRSS DOCKER COMPOSE
+# https://github.com/FreshRSS/FreshRSS
 # Deploys freshrss
 # Joins internal docker network
 # Freshrss:

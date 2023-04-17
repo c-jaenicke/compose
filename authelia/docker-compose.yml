@@ -1,4 +1,5 @@
 # AUTHELIA DOCKER COMPOSE
+# https://github.com/authelia/authelia
 # Deploys authelia service and redis
 # Joins internal docker network
 # Authelia:

@@ -1,4 +1,5 @@
 # MEDIAWIKI COMPOSE
+# https://github.com/wikimedia/mediawiki
 # Deploys mediawiki and mariadb
 # Joins internal docker network
 # Creates internal mediawiki network

@@ -1,4 +1,5 @@
 # DENDRITE MATRIX SERVER COMPOSE
+# https://github.com/matrix-org/dendrite
 # Deploys dendrite monolith and postgres
 # Joins internal docker network
 # Postgres:

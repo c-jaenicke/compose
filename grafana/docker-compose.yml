@@ -1,4 +1,7 @@
 # GRAFANA DOCKER COMPOSE
+# https://github.com/grafana/grafana
+# https://github.com/prometheus/prometheus
+# https://github.com/prometheus-community/postgres_exporter
 # Deploys grafana, prometheus, optionally postgres exporter
 # Joins internal docker network
 # Creates internal grafana network
