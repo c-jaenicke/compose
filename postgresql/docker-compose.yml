@@ -13,7 +13,7 @@ services:
     image: postgres:latest
     restart: unless-stopped
     volumes:
-      - SERVICE-postgres-data::/var/lib/postgresql/data
+      - SERVICE-postgres-data:/var/lib/postgresql/data
     environment:
       - TZ='Europe/Berlin'
       - POSTGRES_PASSWORD=<PASSWORD HERE>
