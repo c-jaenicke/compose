@@ -1,0 +1,31 @@
+# POSTGRESQL COMPOSE
+# https://hub.docker.com/_/postgres
+# Deploys a postgreSQL database
+# Joins internal docker network
+# Postgres:
+#   data:  VOLUME SERVICE-postgres-data
+version: '3.8'
+
+services:
+  postgres:
+    container_name: SERVICE-postgres
+    # Potentially use specific version here
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - SERVICE-postgres-data::/var/lib/postgresql/data
+    environment:
+      - TZ='Europe/Berlin'
+      - POSTGRES_PASSWORD=<PASSWORD HERE>
+      - POSTGRES_USER=<USERNAME HERE>
+      - POSTGRES_DB=<DATABASE NAME HERE>
+
+# save data for service in volume
+volumes:
+  SERVICE-postgres-data:
+
+# join existing network for all containers
+networks:
+  default:
+     external: true
+     name: int-docker-net
