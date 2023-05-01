@@ -1,0 +1,52 @@
+# LINKACE COMPOSE
+# https://github.com/Kovah/LinkAce
+# Deploys linkace and mariadb
+# Joins internal docker network
+# Creates internal linkace network
+# mariadb:
+#   database:  VOLUME linkace-db
+# linkace:
+#   backups: /etc/linkace/backups
+#   logs: /etc/linkace/logs
+version: "3"
+
+services:
+  db:
+    image: mariadb:10.7
+    restart: unless-stopped
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - int-linkace-net 
+  
+  app:
+    image: linkace/linkace:simple
+    restart: unless-stopped
+    depends_on:
+      - db
+    expose:
+      - 80
+    networks:
+      - default
+      - int-linkace-net 
+    volumes:
+      - ./.env:/app/.env
+      - ./backups:/app/storage/app/backups
+      - linkace_logs:/app/storage/logs
+
+volumes:
+  linkace_logs:
+  db:
+    driver: local
+
+networks:
+  default:
+     external: true
+     name: int-docker-net
+  int-linkace-net:
