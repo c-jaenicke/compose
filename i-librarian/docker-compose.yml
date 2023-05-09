@@ -1,0 +1,24 @@
+# I, LIBRARIAN COMPOSE
+# https://github.com/cgrima/docker_i-librarian
+# https://github.com/mkucej/i-librarian-free
+# Deploys i, librarian
+# Joins internal docker network
+# Librarian:
+#   data:  /etc/i-librarian/data    make sure to chown 33:33 data or set container to priviliged
+version: "3.8"
+
+services:
+  librarian:
+    image: cgrima/i-librarian
+    restart: unless-stopped
+    expose:
+      - 80
+    volumes:
+      - /etc/i-librarian/data:/app/data
+    environment:
+      TZ: "Europe/Berlin"
+      
+networks:
+  default:
+     external: true
+     name: int-docker-net
