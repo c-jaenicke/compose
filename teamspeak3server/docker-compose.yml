@@ -1,10 +1,6 @@
 # TEAMSPEAK SERVER DOCKER COMPOSE
 # https://hub.docker.com/_/teamspeak
-# Deploys teamspeak server
-# Joins internal docker network
-# Teamspeak:
-#   data:   VOLUME ts3server-data
-version: '3.8'
+version: "3.9"
 
 services:
   teamspeak:
@@ -16,13 +12,14 @@ services:
       - 10011:10011
       - 30033:30033
     environment:
-      TS3SERVER_LICENSE: accept
+      - TZ="Europe/Berlin"
+      - TS3SERVER_LICENSE=accept
     volumes:
       - ts3server-data:/var/ts3server/
-      
+
 volumes:
   ts3server-data:
-      
+
 networks:
   default:
     external: true

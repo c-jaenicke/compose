@@ -1,12 +1,6 @@
 # PORTAINER DOCKER COMPOSE
 # https://github.com/portainer/portainer
-# Deploys portainer
-# Joins internal docker network
-# Portainer:
-#   data:   /etc/portainer
-#   time:   /etc/localtime/
-#   docker: /var/run/docker.sock
-version: '3.8'
+version: "3.9"
 
 services:
   portainer:
@@ -19,6 +13,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/portainer/data:/data
+    environment:
+      - TZ='Europe/Berlin'
 
 networks:
   default:

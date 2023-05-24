@@ -1,13 +1,6 @@
 # AUTHELIA DOCKER COMPOSE
 # https://github.com/authelia/authelia
-# Deploys authelia service and redis
-# Joins internal docker network
-# Authelia:
-#   config  /etc/authelia
-#   logs:   /var/logs/authelia
-# Redis:
-#   data:   VOLUME authelia-redis
-version: '3.8'
+version: "3.9"
 
 services:
   authelia:
@@ -17,13 +10,11 @@ services:
     expose:
       - 9091
     volumes:
-      # set location for config files
-      - /etc/authelia:/config
-      # set location for log files, to be read by fail2ban
+      - ./authelia:/config
       - /var/log/authelia:/var/log/authelia
     environment:
-      TZ: 'Europe/Berlin'
-      
+      - TZ='Europe/Berlin'
+
   redis:
     container_name: authelia-redis
     image: redis:alpine
@@ -33,12 +24,12 @@ services:
     volumes:
       - authelia-redis:/data
     environment:
-      TZ: 'Europe/Berlin'
+      - TZ='Europe/Berlin'
 
 volumes:
   authelia-redis:
 
 networks:
   default:
-     external: true
-     name: int-docker-net
+    external: true
+    name: int-docker-net

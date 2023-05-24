@@ -1,10 +1,6 @@
 # FRESHRSS DOCKER COMPOSE
 # https://github.com/FreshRSS/FreshRSS
-# Deploys freshrss
-# Joins internal docker network
-# Freshrss:
-#   data:   VOLUME freshrss-data
-version: '3.8'
+version: "3.9"
 
 services:
   freshrss:
@@ -17,8 +13,8 @@ services:
       - freshrss-data:/var/www/FreshRSS/data
       - freshrss-data:/var/www/FreshRSS/extensions
     environment:
-      - "TZ=Europe/Berlin"
-      - "CRON_MIN=1,31"
+      - TZ="Europe/Berlin"
+      - CRON_MIN="1,31"
 
 volumes:
   freshrss-data:

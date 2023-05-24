@@ -1,12 +1,6 @@
 # PRIVATEBIN DOCKER COMPOSE
 # https://github.com/PrivateBin/PrivateBin
-# Deploys privatebin
-# Joins internal docker network
-# Privatebin:
-#   data:   VOLUME privatebin-data
-#     limited to 100G size
-#   config: /etc/privatebin/
-version: '3.8'
+version: "3.9"
 
 services:
   privatebin:
@@ -18,19 +12,14 @@ services:
     read_only: true
     volumes:
       - privatebin-data:/srv/data
-      - /etc/privatebin/cfg:/srv/cfg
+      - ./privatebin/cfg:/srv/cfg
     environment:
-      - "TZ=Europe/Berlin"
+      - TZ="Europe/Berlin"
 
 volumes:
   privatebin-data:
-    driver: local
-    driver_opts:
-      o: "size=100G"
-      device: tmpfs
-      type: tmpfs
-      
+
 networks:
   default:
-     external: true
-     name: int-docker-net
+    external: true
+    name: int-docker-net

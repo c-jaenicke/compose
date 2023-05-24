@@ -1,10 +1,6 @@
-# OPEN PROJECT DOCKER COMPOSE
+# OPEN PROJECT AIO DOCKER COMPOSE
 # https://github.com/opf/openproject
-# Deploys open project aio
-# Joins internal docker network
-# Openproject:
-#   data:   /etc/openproject/
-version: '3.8'
+version: "3.9"
 
 services:
   openproject:
@@ -15,16 +11,14 @@ services:
     environment:
       - OPENPROJECT_HOST__NAME=<DOMAIN HERE>
       - OPENPROJECT_SECRET_KEY_BASE=<SECRET KEY HERE>
-      - "TZ=Europe/Berlin"
+      - TZ='Europe/Berlin'
     volumes:
-      - /etc/openproject/pgdata:/var/openproject/pgdata
-      - /etc/openproject/assets:/var/openproject/assets
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 5m
-      timeout: 10s
-      retries: 3
-      start_period: 1m
+      - openproject-pgdata:/var/openproject/pgdata
+      - openproject-assets:/var/openproject/assets
+
+volumes:
+  openproject-pgdata:
+  openproject-assets:
 
 networks:
   default:
