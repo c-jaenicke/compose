@@ -6,19 +6,21 @@ services:
   openproject:
     container_name: openproject
     image: openproject/community:12
+    restart: unless-stopped
     expose:
       - 8080
     environment:
-      - OPENPROJECT_HOST__NAME=<DOMAIN HERE>
-      - OPENPROJECT_SECRET_KEY_BASE=<SECRET KEY HERE>
+      - OPENPROJECT_HOST__NAME=<FULL URL HERE>
+      # can use ... to generate secret:
+      # head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '' 
+      - OPENPROJECT_SECRET_KEY_BASE=<SECRET HERE>
+      # USE THIS TO DISABLE HTTPS AT START, SHOULD BE SET TO TRUE IN PRODUCTION
+      - OPENPROJECT_HTTPS=false
       - TZ='Europe/Berlin'
     volumes:
-      - openproject-pgdata:/var/openproject/pgdata
-      - openproject-assets:/var/openproject/assets
-
-volumes:
-  openproject-pgdata:
-  openproject-assets:
+      # bind mounts might make more sense here, to clean up of files easier
+      - ./pgdata:/var/openproject/pgdata
+      - ./assets:/var/openproject/assets
 
 networks:
   default:

@@ -14,9 +14,9 @@ services:
     command: -db /data/store.db -vacuum true
     environment:
       - TZ='Europe/Berlin'
-      - PORT="4001"
-      - PS_BEHIND_PROXY="true"
-      - PS_SHARED_SECRET="<SET PASSPHRASE FOR ADMIN LOGIN>"
+      - PORT=4001
+      - PS_BEHIND_PROXY=true
+      - PS_SHARED_SECRET=<SET PASSPHRASE FOR ADMIN LOGIN>
 
 volumes:
   picoshare-data:

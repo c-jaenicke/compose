@@ -29,7 +29,7 @@ A list of commonly used labels to expose a service using treafik. These labels a
     # enable treafik discovery for this service
       - traefik.enable=true
     # set entrypoint to http
-      - traefik.http.routers.<NAME>.entrypoints=web
+    #  - traefik.http.routers.<NAME>.entrypoints=web
     # set entrypoint to https
       - traefik.http.routers.<NAME>.entrypoints=websecure
     # bind to a domain or multiple ones using (`DOMAIN`, `DOMAIN2`)
@@ -39,7 +39,7 @@ A list of commonly used labels to expose a service using treafik. These labels a
     # set cert server
       - traefik.http.routers.<NAME>.tls.certresolver=production
     # enable authelia for service, make sure service is in authelia config
-    #  - traefik.http.routers.changedetection.middlewares=authelia@file
+    #  - traefik.http.routers.<NAME>.middlewares=authelia@file
 ```
 
 This line `- traefik.http.routers.changedetection.middlewares=authelia@file` references a middleware service authelia. See the `traefik/traefik.yml` file, under the section `# MIDDLEWARES` to see how it is configured.
