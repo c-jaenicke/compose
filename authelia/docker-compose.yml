@@ -1,5 +1,6 @@
 # AUTHELIA DOCKER COMPOSE
 # https://github.com/authelia/authelia
+# Authelia, Redis
 version: "3.9"
 
 services:
@@ -10,8 +11,8 @@ services:
     expose:
       - 9091
     volumes:
-      - ./authelia:/config
-      - /var/log/authelia:/var/log/authelia
+      - ./config:/config
+      - ./logs:/var/log/authelia
     environment:
       - TZ='Europe/Berlin'
 

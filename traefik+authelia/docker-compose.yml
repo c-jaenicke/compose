@@ -1,0 +1,64 @@
+# TRAEFIK PROXY DOCKER COMPOSE
+# https://github.com/traefik/traefik
+# Traefik, Authelia, Redis
+version: "3.9"
+
+services:
+  traefik:
+    container_name: traefik
+    image: "traefik:v2.10"
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    # EXPOSE THIS PORT FOR WEB DASHBOARD
+    # - 8080:8080
+    volumes:
+      - ./traefik:/etc/traefik
+      - ./traefik/logs:/logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ='Europe/Berlin'
+    depends_on:
+      - authelia
+
+  authelia:
+    container_name: authelia
+    hostname: authelia
+    image: authelia/authelia
+    restart: always
+    expose:
+      - 9091
+    volumes:
+      - ./authelia:/config
+      - ./authelia/logs:/var/log/authelia
+    environment:
+      - TZ='Europe/Berlin'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.auth.entrypoints=websecure
+      - traefik.http.routers.auth.rule=Host(`<DOMAIN HERE>`)
+      - traefik.http.routers.auth.tls=true
+      - traefik.http.routers.auth.tls.certresolver=production
+    depends_on:
+      - redis
+
+  redis:
+    container_name: authelia-redis
+    hostname: authelia-redis
+    image: redis:alpine
+    restart: always
+    expose:
+      - 6379
+    volumes:
+      - authelia-redis:/data
+    environment:
+      - TZ='Europe/Berlin'
+
+volumes:
+  authelia-redis:
+
+networks:
+  default:
+    external: true
+    name: int-docker-net

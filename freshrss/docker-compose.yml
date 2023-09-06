@@ -1,5 +1,6 @@
 # FRESHRSS DOCKER COMPOSE
 # https://github.com/FreshRSS/FreshRSS
+# FreshRSS
 version: "3.9"
 
 services:

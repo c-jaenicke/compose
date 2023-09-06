@@ -1,20 +1,25 @@
 # TRAEFIK PROXY DOCKER COMPOSE
 # https://github.com/traefik/traefik
+# Traefik
 version: "3.9"
 
 services:
   traefik:
+    container_name: traefik
     # POSSIBLY UPDATE THIS TO USE NEWER VERSION WHEN USING
     image: "traefik:v2.10"
-    container_name: "traefik"
+    restart: always
     ports:
       - 80:80
       - 443:443
       # EXPOSE THIS PORT FOR WEB DASHBOARD
       # - 8080:8080
     volumes:
-      - /etc/traefik:/etc/traefik
+      - ./config:/etc/traefik
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Possibly add volume here for logs
+    environment:
+      - TZ='Europe/Berlin'
 
 networks:
   default:

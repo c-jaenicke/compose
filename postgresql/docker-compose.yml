@@ -1,9 +1,6 @@
 # POSTGRESQL COMPOSE
 # https://hub.docker.com/_/postgres
-# Deploys a postgreSQL database
-# Joins internal docker network
-# Postgres:
-#   data:  VOLUME SERVICE-postgres-data
+# PostgreSQL
 version: '3.8'
 
 services:

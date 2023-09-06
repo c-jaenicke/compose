@@ -2,6 +2,7 @@
 # https://github.com/grafana/grafana
 # https://github.com/prometheus/prometheus
 # https://github.com/prometheus-community/postgres_exporter
+# Grafana, Prometheus, PostgresExporter
 version: "3.9"
 
 services:
@@ -29,7 +30,7 @@ services:
     networks:
       - int-grafana-net
     volumes:
-      - ./grafana/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     environment:
       - TZ="Europe/Berlin"
 

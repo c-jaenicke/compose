@@ -17,8 +17,8 @@ authentication_backend:
   password_reset:
     disable: true
   file:
-  # https://github.com/authelia/authelia/blob/master/config.template.yml#L270
-    # CREATE FILE
+    # https://github.com/authelia/authelia/blob/master/config.template.yml#L270
+    # MAKE SURE THIS FILE EXISTS OR CREATE IT
     path: /config/users_database.yml
     password:
       algorithm: argon2id
@@ -40,8 +40,15 @@ access_control:
     - domain:
         - "auth.<DOMAIN HERE>"
       policy: bypass
+    # Domains accessible using one factor
     - domain:
-        # - <URL OF SERVICE>"
+        # - <DOMAIN OF SERVICE>"
+      policy: one_factor
+    # Domains accessible using one factor, only by users in admin group
+    - domain:
+        # - <DOMAIN OF SERVICE>
+      subject:
+        - "group:admins"
       policy: one_factor
 
 # SESSION SETTINGS

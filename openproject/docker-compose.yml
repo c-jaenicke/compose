@@ -1,5 +1,6 @@
 # OPEN PROJECT AIO DOCKER COMPOSE
 # https://github.com/opf/openproject
+# OpenProject
 version: "3.9"
 
 services:
@@ -12,7 +13,7 @@ services:
     environment:
       - OPENPROJECT_HOST__NAME=<FULL URL HERE>
       # can use ... to generate secret:
-      # head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '' 
+      # head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo ''
       - OPENPROJECT_SECRET_KEY_BASE=<SECRET HERE>
       # USE THIS TO DISABLE HTTPS AT START, SHOULD BE SET TO TRUE IN PRODUCTION
       - OPENPROJECT_HTTPS=false
