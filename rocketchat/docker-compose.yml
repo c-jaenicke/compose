@@ -1,0 +1,53 @@
+# ROCKET CHAT COMPOSE
+# https://www.rocket.chat/
+# https://docs.rocket.chat/deploy/deploy-rocket.chat/deploy-with-docker-and-docker-compose#preparation-steps
+# RocketChat, MongoDB
+version: "3.9"
+
+services:
+  rocketchat:
+    container_name: rocketchat-app
+    hostname: rocketchat-app
+    image: registry.rocket.chat/rocketchat/rocket.chat:${RELEASE:-latest}
+    restart: unless-stopped
+    expose:
+      - 3000
+    environment:
+      # using "- KEY=VALUE" doesn't seem to work here!
+      TZ: 'Europe/Berlin'
+      MONGO_URL: "${MONGO_URL:-\
+        mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
+        ${MONGODB_DATABASE:-rocketchat}?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
+      MONGO_OPLOG_URL: "${MONGO_OPLOG_URL:\
+        -mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
+        local?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
+      ROOT_URL: ${ROOT_URL:-http://localhost:${HOST_PORT:-3000}}
+      PORT: ${PORT:-3000}
+      DEPLOY_METHOD: docker
+      DEPLOY_PLATFORM: ${DEPLOY_PLATFORM:-}
+      REG_TOKEN: ${REG_TOKEN:-}
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: docker.io/bitnami/mongodb:${MONGODB_VERSION:-5.0}
+    restart: always
+    volumes:
+      - rocketchat-mongo-db:/bitnami/mongodb
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_NAME: ${MONGODB_REPLICA_SET_NAME:-rs0}
+      MONGODB_PORT_NUMBER: ${MONGODB_PORT_NUMBER:-27017}
+      MONGODB_INITIAL_PRIMARY_HOST: ${MONGODB_INITIAL_PRIMARY_HOST:-mongodb}
+      MONGODB_INITIAL_PRIMARY_PORT_NUMBER: ${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}
+      MONGODB_ADVERTISED_HOSTNAME: ${MONGODB_ADVERTISED_HOSTNAME:-mongodb}
+      MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
+      ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
+
+networks:
+  default:
+    external: true
+    name: int-docker-net
+
+volumes:
+  rocketchat-mongo-db:
