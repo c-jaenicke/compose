@@ -6,12 +6,13 @@ version: "3.9"
 services:
   it-tools:
     container_name: it-tools
+    hostname: it-tools
     image: corentinth/it-tools:latest
     restart: unless-stopped
     expose:
       - 8080
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
 
 networks:
   default:

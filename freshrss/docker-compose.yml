@@ -6,6 +6,7 @@ version: "3.9"
 services:
   freshrss:
     container_name: freshrss
+    hostname: freshrss
     image: freshrss/freshrss:latest
     restart: unless-stopped
     expose:
@@ -14,13 +15,9 @@ services:
       - ./data:/var/www/FreshRSS/data
       - ./data:/var/www/FreshRSS/extensions
     environment:
-      - TZ="Europe/Berlin"
+      - TZ=Europe/Berlin
       # cron jobs runs at 1 and 31 every hour to refresh the feed
       - CRON_MIN="1,31"
-    logging:
-      options:
-        max-size: "200k"
-        max-file: "10"
 
 networks:
   default:

@@ -8,18 +8,19 @@ version: "3.9"
 services:
   grafana:
     container_name: grafana-app
+    hostname: grafana-app
     image: grafana/grafana
     restart: unless-stopped
     expose:
       - 3000
-    networks:
-      - int-grafana-net
-      - int-docker-net
     volumes:
       - grafana-data:/var/lib/grafana
     environment:
+      - TZ=Europe/Berlin
       - GF_SERVER_ROOT_URL=<DOMAIN HERE>
-      - TZ="Europe/Berlin"
+    networks:
+      - int-grafana-net
+      - int-docker-net
 
   prometheus:
     container_name: grafana-prometheus
@@ -27,12 +28,12 @@ services:
     restart: unless-stopped
     expose:
       - 9090
-    networks:
-      - int-grafana-net
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     environment:
-      - TZ="Europe/Berlin"
+      - TZ=Europe/Berlin
+    networks:
+      - int-grafana-net
 
 # Optional: for monitoring postgres database
 #  postgresexporter:

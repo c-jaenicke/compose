@@ -6,6 +6,7 @@ version: "3.9"
 services:
   whiteboard:
     container_name: whiteboard
+    hostname: whiteboard
     image: lovasoa/wbo
     restart: unless-stopped
     expose:

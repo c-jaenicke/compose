@@ -12,12 +12,12 @@ services:
       - 4001
     volumes:
       - picoshare-data:/data
-    command: -db /data/store.db -vacuum true
     environment:
       - TZ='Europe/Berlin'
       - PORT=4001
       - PS_BEHIND_PROXY=true
       - PS_SHARED_SECRET=<SET PASSPHRASE FOR ADMIN LOGIN>
+    command: -db /data/store.db -vacuum true
 
 volumes:
   picoshare-data:

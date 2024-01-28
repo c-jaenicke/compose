@@ -23,6 +23,8 @@ services:
       - <SERVICE NAME>
     healthcheck:
       <TEST HERE>
+    logging:
+      <logging options>
 
 # save data for service in a volume
 volumes:

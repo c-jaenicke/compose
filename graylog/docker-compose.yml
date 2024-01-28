@@ -55,6 +55,9 @@ services:
       mongodb:
         condition: "service_started"
     entrypoint: "/usr/bin/tini --  /docker-entrypoint.sh"
+    volumes:
+      - "graylog-data:/usr/share/graylog/data/data"
+      - "graylog-journal:/usr/share/graylog/data/journal"
     environment:
       - GRAYLOG_NODE_ID_FILE=/usr/share/graylog/data/data/node-id
       - GRAYLOG_PASSWORD_SECRET=${GRAYLOG_PASSWORD_SECRET}
@@ -80,9 +83,6 @@ services:
       #  - "13302:13302/tcp" # Forwarder config
     expose:
       - 9000
-    volumes:
-      - "graylog-data:/usr/share/graylog/data/data"
-      - "graylog-journal:/usr/share/graylog/data/journal"
     # DISABLE THE HEALTHCHECK, this has to be done, if not, traefik will not recognise this container as it will be unhealthy
     healthcheck:
       disable: true

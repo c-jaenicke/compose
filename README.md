@@ -99,6 +99,16 @@ docker compose logs -f <container name>
         tag: <service-name>
 ```
 
+### Using Json File
+
+```yaml
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+```
+
 ## Update Running Compose stack
 
 ```shell

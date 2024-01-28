@@ -6,10 +6,15 @@ version: "3.9"
 services:
   openproject:
     container_name: openproject
+    hostname: openproject
     image: openproject/community:12
     restart: unless-stopped
     expose:
       - 8080
+    volumes:
+      # bind mounts might make more sense here, to clean up of files easier
+      - ./pgdata:/var/openproject/pgdata
+      - ./assets:/var/openproject/assets
     environment:
       - OPENPROJECT_HOST__NAME=<FULL URL HERE>
       # can use ... to generate secret:
@@ -18,10 +23,6 @@ services:
       # USE THIS TO DISABLE HTTPS AT START, SHOULD BE SET TO TRUE IN PRODUCTION
       - OPENPROJECT_HTTPS=false
       - TZ='Europe/Berlin'
-    volumes:
-      # bind mounts might make more sense here, to clean up of files easier
-      - ./pgdata:/var/openproject/pgdata
-      - ./assets:/var/openproject/assets
 
 networks:
   default:

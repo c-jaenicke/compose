@@ -19,24 +19,24 @@ services:
       # Mounting config file after initial start
       # - /etc/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
 
   mariadb:
     container_name: mediawiki-db
     hostname: mediawiki-db
     image: mariadb
     restart: unless-stopped
-    networks:
-      - int-mediawiki-net
+    volumes:
+      - mediawiki-db:/var/lib/mysql
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
       - MYSQL_DATABASE=<DATABASE NAME HERE>
       - MYSQL_USER=<USERNAME HERE>
       - MYSQL_PASSWORD=<PASSWORD HERE>
       # LEAVE TO GENERATE RANDOM ROOT PASSWORD FOR INSTANCE
       #- MYSQL_RANDOM_ROOT_PASSWORD='yes'
-    volumes:
-      - mediawiki-db:/var/lib/mysql
+    networks:
+      - int-mediawiki-net
 
 volumes:
   mediawiki-images:

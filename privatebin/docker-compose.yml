@@ -6,6 +6,7 @@ version: "3.9"
 services:
   privatebin:
     container_name: privatebin
+    hostname: privatebin
     image: privatebin/nginx-fpm-alpine
     restart: unless-stopped
     expose:
@@ -15,7 +16,7 @@ services:
       - privatebin-data:/srv/data
       - ./privatebin/cfg:/srv/cfg
     environment:
-      - TZ="Europe/Berlin"
+      - TZ=Europe/Berlin
 
 volumes:
   privatebin-data:
