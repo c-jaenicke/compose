@@ -6,16 +6,25 @@ version: "3.9"
 services:
   <SERVICE NAME>:
     container_name: <CONTAINER NAME>
+    hostname: <HOST NAME, same as container name>
     image: <IMAGE>
     restart: unless-stopped
+    ports:
+      - "<port on host>:<port in container>"
     expose:
       - <PORT>
     volumes:
       - <VOLUME MOUNTS>
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
+    labels:
+      - <LABEL>
+    depends_on:
+      - <SERVICE NAME>
+    healthcheck:
+      <TEST HERE>
 
-# save data for service in volume
+# save data for service in a volume
 volumes:
   <SERVICE NAME>-data:
 

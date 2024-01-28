@@ -6,6 +6,7 @@ version: "3.9"
 services:
   authelia:
     container_name: authelia
+    hostname: authelia
     image: authelia/authelia
     restart: unless-stopped
     expose:
@@ -14,10 +15,11 @@ services:
       - ./config:/config
       - ./logs:/var/log/authelia
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
 
   redis:
     container_name: authelia-redis
+    hostname: authelia-redis
     image: redis:alpine
     restart: unless-stopped
     expose:
@@ -25,7 +27,7 @@ services:
     volumes:
       - authelia-redis:/data
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
 
 volumes:
   authelia-redis:
