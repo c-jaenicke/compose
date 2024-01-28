@@ -87,6 +87,18 @@ truncate -s 0 $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
 docker compose logs -f <container name>
 ```
 
+### Using Graylog
+
+```yaml
+    logging:
+      driver: gelf
+      options:
+        # this references the static ip given to the graylog container
+        # port is standard is a gelf udp note, created in web ui
+        gelf-address: "udp://172.19.200.1:12201"
+        tag: <service-name>
+```
+
 ## Update Running Compose stack
 
 ```shell

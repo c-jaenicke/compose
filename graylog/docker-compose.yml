@@ -42,6 +42,9 @@ services:
     #  - "9300:9300/tcp"
     volumes:
       - graylog-datanode:/var/lib/graylog-datanode
+    networks:
+      default:
+        ipv4_address: 172.19.200.2
 
   graylog:
     container_name: graylog
@@ -83,6 +86,9 @@ services:
     # DISABLE THE HEALTHCHECK, this has to be done, if not, traefik will not recognise this container as it will be unhealthy
     healthcheck:
       disable: true
+    networks:
+      default:
+        ipv4_address: 172.19.200.1
 
 volumes:
   graylog-db:
