@@ -1,7 +1,6 @@
 # TRAEFIK PROXY DOCKER COMPOSE
 # https://github.com/traefik/traefik
 # Traefik, Authelia, Redis
-version: "3.9"
 
 services:
   traefik:

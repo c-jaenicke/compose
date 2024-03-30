@@ -1,7 +1,6 @@
 # CHANGEDETECTION DOCKER COMPOSE
 # https://github.com/dgtlmoon/changedetection.io
 # Changedetection
-version: "3.9"
 
 services:
   changedetection:

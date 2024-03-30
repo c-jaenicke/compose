@@ -1,7 +1,6 @@
 # WHITEBOARD DOCKER COMPOSE
 # https://github.com/lovasoa/whitebophir
 # Whitebophir
-version: "3.9"
 
 services:
   whiteboard:

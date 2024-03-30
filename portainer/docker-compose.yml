@@ -1,7 +1,6 @@
 # PORTAINER DOCKER COMPOSE
 # https://github.com/portainer/portainer
 # Portainer
-version: "3.9"
 
 services:
   portainer:

@@ -1,7 +1,6 @@
 # PICOSHARE COMPOSE
 # https://github.com/mtlynch/picoshare
 # Picoshare
-version: "3.9"
 
 services:
   app:

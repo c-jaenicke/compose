@@ -1,7 +1,6 @@
 # NGINX PROXY MANAGER DOCKER COMPOSE
 # https://github.com/NginxProxyManager/nginx-proxy-manager
 # NginxProxyManager
-version: '3.8'
 
 services:
   nginx:

@@ -1,7 +1,6 @@
 # GRAYLOG COMPOSE
 # https://github.com/Graylog2/docker-compose/blob/main/open-core/docker-compose.yml
 # Graylog, MongoDB, Graylog Datanode
-version: "3.9"
 
 services:
   mongodb:

@@ -1,7 +1,6 @@
 # MEDIAWIKI COMPOSE
 # https://github.com/wikimedia/mediawiki
 # MediaWiki, MariaDB
-version: "3.9"
 
 services:
   mediawiki:

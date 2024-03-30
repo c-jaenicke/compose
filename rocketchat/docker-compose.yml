@@ -2,7 +2,6 @@
 # https://www.rocket.chat/
 # https://docs.rocket.chat/deploy/deploy-rocket.chat/deploy-with-docker-and-docker-compose#preparation-steps
 # RocketChat, MongoDB
-version: "3.9"
 
 services:
   rocketchat:

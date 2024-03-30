@@ -1,7 +1,6 @@
 # STIRLING PDF COMPOSE
 # https://github.com/Frooodle/Stirling-PDF
 # StirlingPDF
-version: "3.9"
 
 services:
   stirling-pdf:

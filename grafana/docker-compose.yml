@@ -3,7 +3,6 @@
 # https://github.com/prometheus/prometheus
 # https://github.com/prometheus-community/postgres_exporter
 # Grafana, Prometheus, PostgresExporter
-version: "3.9"
 
 services:
   grafana:

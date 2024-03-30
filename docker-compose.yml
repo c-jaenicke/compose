@@ -1,7 +1,6 @@
 # <SERIVCE NAME> COMPOSE
 # <LINK TO SERVICE SOURCE>
 # <LIST OF SERVICES IN COMPOSE (e.g. Traefik, Prometheus, MariaDB)>
-version: "3.9"
 
 services:
   <SERVICE NAME>:

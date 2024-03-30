@@ -1,7 +1,6 @@
 # PRIVATEBIN DOCKER COMPOSE
 # https://github.com/PrivateBin/PrivateBin
 # Privatebin
-version: "3.9"
 
 services:
   privatebin:

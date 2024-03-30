@@ -1,7 +1,6 @@
 # TEAMSPEAK SERVER DOCKER COMPOSE
 # https://hub.docker.com/_/teamspeak
 # Teamspeak3Server
-version: "3.9"
 
 services:
   teamspeak:

@@ -3,7 +3,6 @@
 # Dendrite, Postgres
 # Run create-config.sh before running stack to set values
 # Run generate-keys.sh before running stack to generate keys
-version: "3.9"
 
 services:
   server:

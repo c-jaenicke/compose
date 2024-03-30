@@ -1,6 +1,5 @@
 # UMAMI COMPOSE
 # https://github.com/umami-software/umami
-version: "3.9"
 
 services:
   umami:

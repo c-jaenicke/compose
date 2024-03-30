@@ -1,7 +1,6 @@
 # ZAMMAD COMPOSE
 # https://github.com/zammad/zammad-docker-compose
 # Zammad (Init, Memcached, Nginx, Railsserver, Redis, Scheduler, Websocket), PostgreSQL
-version: "3.9"
 
 x-shared:
   zammad-service: &zammad-service
