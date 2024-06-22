@@ -9,15 +9,15 @@ global:
 
 # OBSERVABILITY
 ## LOGS
-# log:
-#  level: ERROR  # DEBUG, INFO, WARNING, ERROR, CRITICAL
-#   format: common  # common, json, logfmt
-#   filePath: /var/log/traefik/traefik.log
+#log:
+#  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+#  format: json  # common, json, logfmt
+#  filePath: "/home/zincxenon/docker/traefik/logs/traefik.log"
 
 ## ACCESS LOGS
-# accesslog:
-# format: common  # common, json, logfmt
-# filePath: /var/log/traefik/access.log
+#accesslog:
+#  format: common  # common, json, logfmt
+#  filePath: "/home/zincxenon/docker/traefik/logs/access.log"
 
 # OPERATIONS
 ## API DASHBOARD
@@ -34,11 +34,11 @@ entryPoints:
   web:
     address: ":80"
     # Redirect incoming HTTP traffic to HTTPS
-    # http:
-    #   redirections:
-    #     entryPoint:
-    #       to: websecure
-    #       scheme: https
+    #http:
+    #  redirections:
+    #    entryPoint:
+    #      to: websecure
+    #      scheme: https
 
   # HTTPS
   websecure:
@@ -50,11 +50,12 @@ entryPoints:
     address: ":8081"
 
 # MIDDLEWARES
+# configure authelia middleware here
 http:
   middlewares:
     authelia-basic:
       forwardAuth:
-        address: "http://authelia:9091/api/verify?rd=https://auth.<DOMAIN HERE>"
+        address: "http://authelia:9091/api/verify?rd=https://auth.<DOMAIN.TLD HERE>"
         trustForwardHeader: true
         authResponseHeaders:
           - "Remote-User"
@@ -63,7 +64,7 @@ http:
           - "Remote-Name"
     authelia:
       forwardAuth:
-        address: "http://authelia:9091/api/verify?rd=https://auth.<DOMAIN HERE>"
+        address: "http://authelia:9091/api/verify?rd=https://auth.<DOMAIN.TLD HERE>"
         trustForwardHeader: true
         authResponseHeaders:
           - Remote-User
@@ -82,7 +83,7 @@ http:
 certificatesResolvers:
   staging:
     acme:
-      email: <EMAIL HERE>
+      email: <EMAIL OF ADMIN HERE, will be used to recieve certificate>
       storage: /etc/traefik/certs/acme.json
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       httpChallenge:
@@ -90,7 +91,7 @@ certificatesResolvers:
 
   production:
     acme:
-      email: <EMAIL HERE>
+      email: <EMAIL OF ADMIN HERE, will be used to recieve certificate>
       storage: /etc/traefik/certs/acme.json
       caServer: "https://acme-v02.api.letsencrypt.org/directory"
       httpChallenge:

@@ -1,25 +1,25 @@
 # TRAEFIK PROXY DOCKER COMPOSE
 # https://github.com/traefik/traefik
-# Traefik, Authelia, Redis
 
 services:
   traefik:
-    container_name: traefik
-    image: "traefik:v2.10"
+    image: "traefik:v3.0.3"
+    container_name: "traefik"
     restart: always
+    privileged: true
     ports:
       - 80:80
       - 443:443
-    # EXPOSE THIS PORT FOR WEB DASHBOARD
-    # - 8080:8080
+      - 8080:8080
     volumes:
-      - ./traefik:/etc/traefik
-      - ./traefik/logs:/logs
+      - ./data:/etc/traefik
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      - TZ='Europe/Berlin'
     depends_on:
       - authelia
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
 
   authelia:
     container_name: authelia
@@ -29,14 +29,14 @@ services:
     expose:
       - 9091
     volumes:
-      - ./authelia:/config
-      - ./authelia/logs:/var/log/authelia
+      - ./authelia-data:/config
+      - ./authelia-logs:/var/log/authelia
     environment:
       - TZ='Europe/Berlin'
     labels:
       - traefik.enable=true
       - traefik.http.routers.auth.entrypoints=websecure
-      - traefik.http.routers.auth.rule=Host(`<DOMAIN HERE>`)
+      - traefik.http.routers.auth.rule=Host(`auth.<DOMAIN.TDL HERE, so that traefik can route authelia domain traffic to container>`)
       - traefik.http.routers.auth.tls=true
       - traefik.http.routers.auth.tls.certresolver=production
     depends_on:

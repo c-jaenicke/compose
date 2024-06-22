@@ -1,0 +1,15 @@
+####################################################################################################
+# AUTHELIA USER DATABASE
+# FILE BASED USER
+####################################################################################################
+
+users:
+  <USERNAME>:
+    displayname: "<LOGIN NAME>"
+    # hash using docker run authelia/authelia:latest authelia crypto hash generate argon2 --password 'password'
+    password: "<OUTPUT OF HASH COMMAND HERE WITHOUT 'Digest: '>"
+    email: <EMAIL OF USER, OPTIONAL>
+    groups:
+    # groups a user is in, used in rules
+      - admins
+      - dev
