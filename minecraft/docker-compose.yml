@@ -1,0 +1,35 @@
+# MINECRAFT SERVER COMPOSE
+# https://github.com/itzg/docker-minecraft-server
+# https://docker-minecraft-server.readthedocs.io/en/latest/
+# minecraft-server
+
+services:
+  app:
+    container_name: mc-<MODPACK NAME>
+    hostname: mc-<MODPACK NAME>
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    ports:
+      - 25565:25565
+    volumes:
+      - ./data:/data
+      - ./downloads:/downloads
+      - ./modpacks:/modpacks
+    environment:
+      - TZ=Europe/Berlin
+      # accept eula for server
+      - EULA=TRUE
+      # set available memory for server
+      - MEMORY=24G
+      # Auto FTB Modpack Server
+      - TYPE=<AUTO_CURSEFORGE | FTBA | MODRINTH>
+      # set id of modpack for download, only for packs available on ftb
+      - FTB_MODPACK_ID=
+
+# join existing network for all containers
+networks:
+  default:
+    external: true
+    name: int-docker-net
