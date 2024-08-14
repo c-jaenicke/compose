@@ -3,13 +3,13 @@
 # Excalidraw
 
 services:
-  excalidraw:
+  app:
     container_name: excalidraw-app
     hostname: excalidraw-app
     image: excalidraw/excalidraw:latest
     restart: unless-stopped
     expose:
-      - 5000
+      - 80
     environment:
       - TZ=Europe/Berlin
 

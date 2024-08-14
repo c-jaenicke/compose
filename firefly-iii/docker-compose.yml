@@ -1,0 +1,33 @@
+# DOCKER COMPOSE FOR Firefly III
+# https://github.com/firefly-iii/firefly-iii
+# Firefly III, MariaDB
+
+services:
+  core:
+    container_name: firefly-iii-core
+    hostname: firefly-iii-core
+    image: fireflyiii/core:latest
+    restart: unless-stopped
+    volumes:
+      - ./upload:/var/www/html/storage/upload
+    env_file: .env
+    ports:
+      - "127.0.0.1:9995:8080"
+    depends_on:
+      - db
+    logging:
+      driver: none
+
+  db:
+    container_name: firefly-iii-db
+    hostname: firefly-iii-db
+    image: mariadb
+    restart: unless-stopped
+    env_file: .db.env
+    volumes:
+      - ./db:/var/lib/mysql
+    logging:
+      driver: none
+
+volumes:
+  firefly_iii_db:

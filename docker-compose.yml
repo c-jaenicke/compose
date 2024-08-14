@@ -1,21 +1,26 @@
 # <SERIVCE NAME> COMPOSE
-# <LINK TO SERVICE SOURCE>
+# <LINK TO SERVICE SOURCE OR DOCUMENTATION>
 # <LIST OF SERVICES IN COMPOSE (e.g. Traefik, Prometheus, MariaDB)>
 
 services:
   <SERVICE NAME>:
     container_name: <CONTAINER NAME>
-    hostname: <HOST NAME, same as container name>
+    hostname: <CONTAINER NAME>
     image: <IMAGE>
     restart: unless-stopped
+    # map port in container to port on host. will expose port externally
     ports:
       - "<port on host>:<port in container>"
+      # use following if port should only be available on localhost
+      - "127.0.0.1:<port on host>:<port in container>"
+    # expose port in container to other containers
     expose:
       - <PORT>
     volumes:
-      - <VOLUME MOUNTS>
+      - <VOLUME or PATH>:<MOUNT POINT IN CONTAINER>
     environment:
       - TZ=Europe/Berlin
+    # traefik labels here
     labels:
       - <LABEL>
     depends_on:
