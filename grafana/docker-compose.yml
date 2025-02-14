@@ -2,54 +2,82 @@
 # https://github.com/grafana/grafana
 # https://github.com/prometheus/prometheus
 # https://github.com/prometheus-community/postgres_exporter
-# Grafana, Prometheus, PostgresExporter
 
 services:
-  grafana:
-    container_name: grafana-app
-    hostname: grafana-app
+  grafana-app:
     image: grafana/grafana
     restart: unless-stopped
     expose:
       - 3000
     volumes:
-      - grafana-data:/var/lib/grafana
+      - app-data:/var/lib/grafana
     environment:
+      - GF_SERVER_ROOT_URL=FQDN_HERE
       - TZ=Europe/Berlin
-      - GF_SERVER_ROOT_URL=<DOMAIN HERE>
+      - GF_USERS_AUTO_ASSIGN_ORG=true
+      - GF_USERS_AUTO_ASSIGN_ORG_ID=1
+      # USE FOLLOWING VARIABLES TO ENABLE Generic OAuth
+      #- GF_AUTH_GENERIC_OAUTH_ENABLED="true"
+      #- GF_AUTH_GENERIC_OAUTH_NAME=""
+      #- GF_AUTH_GENERIC_OAUTH_CLIENT_ID=""
+      #- GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET=""
+      #- GF_AUTH_GENERIC_OAUTH_SCOPES=""
+      #- GF_AUTH_GENERIC_OAUTH_AUTH_URL=""
+      #- GF_AUTH_GENERIC_OAUTH_TOKEN_URL=""
+      #- GF_AUTH_GENERIC_OAUTH_API_URL=""
+      #- GF_AUTH_SIGNOUT_REDIRECT_URL=""
+      #- GF_AUTH_OAUTH_AUTO_LOGIN=""
+      #- GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH=
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
-      - int-grafana-net
-      - int-docker-net
+      - default
 
-  prometheus:
-    container_name: grafana-prometheus
+  prometheus-server:
     image: prom/prometheus
     restart: unless-stopped
     expose:
       - 9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-server-data:/prometheus
     environment:
       - TZ=Europe/Berlin
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
-      - int-grafana-net
+      - default
 
-# Optional: for monitoring postgres database
-#  postgresexporter:
-#    container_name: grafana-postgresexporter
-#    image: quay.io/prometheuscommunity/postgres-exporter
-#    restart: unless-stopped
-#    expose:
-#      - 9187
-#    environment:
-#      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_ADDRESS}:5432/${POSTGRES_DB}?sslmode=disable
-#      - "TZ=Europe/Berlin"
+  prometheus-node-exporter:
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    expose:
+      - 9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
 
 volumes:
-  grafana-data:
+  app-data:
+  prometheus-server-data:
 
 networks:
   default:
     external: true
     name: int-docker-net
-  int-grafana-net:

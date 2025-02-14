@@ -1,0 +1,132 @@
+###########################################################################
+# TRAEFIK STATIC CONFIGURATION FILE
+# https://doc.traefik.io/traefik/
+###########################################################################
+
+# Global Configuration
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# OBSERVABILITY
+# Logs
+log:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: json  # common, json, logfmt
+  # filePath: "/path/to/logs/traefik.log"  # Uncomment and update for log file path
+
+# Access Logs
+accesslog:
+  format: common  # common, json, logfmt
+  # filePath: "/path/to/logs/access.log"  # Uncomment and update for access log file path
+
+# Operations
+# API Dashboard
+api:
+  dashboard: true  # true by default
+  insecure: true   # DISABLE IN PRODUCTION
+
+# Routing and Load Balancing
+# EntryPoints
+entryPoints:
+  # HTTP EntryPoint
+  web:
+    address: ":80"
+    # Redirect incoming HTTP traffic to HTTPS
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+
+  # HTTPS EntryPoint
+  websecure:
+    address: ":443"
+
+  # Metrics EntryPoint (to be scraped by Prometheus)
+  metrics:
+    address: ":8081"
+
+# Middlewares
+http:
+  middlewares:
+    authentik:
+      # Label: traefik.http.routers.<service_name>.middlewares=authentik@file
+      forwardauth:
+        address: http://traefik-data-auth-server:9000/outpost.goauthentik.io/auth/traefik
+        trustForwardHeader: true
+        authResponseHeaders:
+          - X-authentik-username
+          - X-authentik-groups
+          - X-authentik-email
+          - X-authentik-name
+          - X-authentik-uid
+          - X-authentik-jwt
+          - X-authentik-meta-jwks
+          - X-authentik-meta-outpost
+          - X-authentik-meta-provider
+          - X-authentik-meta-app
+          - X-authentik-meta-version
+
+# HTTPS and TLS
+# Let's Encrypt Configuration
+# IMPORTANT NOTES:
+# 1. Make sure to create ./certs/ and set permissions to 600!
+# 2. When switching from STAGING to PRODUCTION certificate:
+#    - Make sure to delete acme.json, else no new certificate will be issued!
+#    - This also means that every certificate will be reissued!
+#    - Ensure not to get caught by the rate limit!
+
+certificatesResolvers:
+  staging:
+    acme:
+      email: SET_EMAIL_HERE
+      storage: /etc/traefik/certs/acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web
+
+  production:
+    acme:
+      email: SET_EMAIL_HERE
+      storage: /etc/traefik/certs/acme.json
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web
+
+# TLS (Optional)
+# tls:
+#   stores:
+#     default:
+#       defaultCertificate:
+#         certFile: /etc/traefik/certs/cert.pem
+#         keyFile: /etc/traefik/certs/cert-key.pem
+#   options:
+#     default:
+#       minVersion: VersionTLS12  # Disable TLS 1.0 and 1.1
+
+# Configuration Discovery
+providers:
+  docker:
+    # Use this to set socket proxy as socket
+    endpoint: "tcp://traefik-authentik-socket-proxy-proxy:2375"
+    # Don't expose containers by default, containers require labels to be exposed
+    # See: https://doc.traefik.io/traefik/providers/docker/#routing-configuration-with-labels
+    exposedByDefault: false
+    # Set default network for exposed containers
+    # If not set, Traefik will choose a random network for routing
+    network: int-docker-net
+
+  file:
+    # Watch for dynamic configuration changes
+    directory: /etc/traefik
+    watch: true
+
+# Metrics
+# Prometheus Metrics Configuration
+metrics:
+  prometheus:
+    entryPoint: metrics
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true

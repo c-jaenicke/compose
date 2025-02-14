@@ -1,0 +1,53 @@
+### CHANGES HERE
+  proxy:
+    container_name: kasm_proxy
+    image: "kasmweb/proxy:1.16.1"
+    ########################################
+    #ports:
+    #  - "8443:8443"
+    expose:
+      - "8443"
+    ########################################
+    networks:
+      - kasm_default_network
+      - kasm_sidecar_network
+      ########################################
+      - default
+      ########################################
+    volumes:
+      - /opt/kasm/1.16.1/conf/nginx:/etc/nginx/conf.d:ro
+      - /opt/kasm/1.16.1/certs/kasm_nginx.key:/etc/ssl/private/kasm_nginx.key
+      - /opt/kasm/1.16.1/certs/kasm_nginx.crt:/etc/ssl/certs/kasm_nginx.crt
+      - /opt/kasm/1.16.1/log/nginx:/var/log/external/nginx/
+      - /opt/kasm/1.16.1/log/logrotate:/var/log/external/logrotate/
+    depends_on:
+      - kasm_manager
+      - kasm_api
+      - kasm_agent
+      - kasm_share
+      - kasm_guac
+      - kasm_rdp_https_gateway
+    restart: always
+    ########################################
+    labels:
+      - traefik.enable=true
+    ########################################
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "20"
+
+volumes:
+  kasm_db_1.16.1:
+    external: true
+networks:
+  ########################################
+  default:
+    external: true
+    name: int-docker-net
+  ########################################
+  kasm_default_network:
+    external: true
+  kasm_sidecar_network:
+    external: true

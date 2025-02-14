@@ -1,41 +1,58 @@
-# UMAMI COMPOSE
-# https://github.com/umami-software/umami
+# UMAMI ANALYTICS DOCKER COMPOSE
+# https://umami.is/
 
 services:
-  umami:
-    container_name: umami-app
+  app:
     image: ghcr.io/umami-software/umami:postgresql-latest
     restart: unless-stopped
     expose:
       - 3000
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql://umami:umami@db:5432/umami
+      - DATABASE_URL=postgresql://${PG_USER}:${PG_PASS:?database password required}@postgres-db:5432/${PG_DB}
       - DATABASE_TYPE=postgresql
-      - APP_SECRET=<RANDOM STRING HERE>
-      - TZ='Europe/Berlin'
+      - APP_SECRET=${UMAMI_SECRET_KEY}
     depends_on:
-      db:
+      umami-db:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
 
-  db:
-    container_name: umami-db
-    image: postgres:15-alpine
+  postgres-db:
+    image: bitnami/postgresql:16
     restart: unless-stopped
-    environment:
-      - POSTGRES_DB=umami
-      - POSTGRES_USER=umami
-      - POSTGRES_PASSWORD=umami
-      - TZ='Europe/Berlin'
     volumes:
-      - umami-db-data:/var/lib/postgresql/data
+      - postgres-db-data:/bitnami/postgresql
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+      - POSTGRESQL_PASSWORD=${PG_PASS:?database password required}
+      - POSTGRESQL_USERNAME=${PG_USER}
+      - POSTGRESQL_DATABASE=${PG_DB}
+      - POSTGRESQL_TIMEZONE=Europe/Berlin
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
+      test: [ "CMD-SHELL", "pg_isready -d $${PG_DB} -U $${PG_USER}" ]
+      start_period: 20s
+      interval: 30s
       retries: 5
+      timeout: 5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
 
 volumes:
-  umami-db-data:
+  postgres-db-data:
 
 networks:
   default:

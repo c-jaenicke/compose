@@ -1,0 +1,203 @@
+# TRAEFIK REVERSE PROXY + AUTHENTIK AUTHENTICATION SERVICE DOCKER COMPOSE
+# https://traefik.io/traefik/
+# https://github.com/traefik/traefik
+# https://github.com/goauthentik/authentik
+# https://goauthentik.io/
+
+services:
+  proxy:
+    image: traefik:v3.3.2
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      # PORT 8080 FOR UNSECURED DASHBOARD!
+      - 8080:8080
+    volumes:
+      - ./proxy-data/certs:/etc/traefik/certs
+      - ./proxy-data:/etc/traefik:ro
+    environment:
+      - TZ=Europe/Berlin
+    depends_on:
+      - auth-server
+      - socket-proxy-proxy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
+
+  socket-proxy-proxy:
+    image: lscr.io/linuxserver/socket-proxy:latest
+    restart: always
+    environment:
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
+
+  auth-postgres-db:
+    image: bitnami/postgresql:16
+    restart: always
+    volumes:
+      - auth-postgres-db-data:/bitnami/postgresql
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+      - POSTGRESQL_PASSWORD=${PG_PASS:?database password required}
+      - POSTGRESQL_USERNAME=${PG_USER}
+      - POSTGRESQL_DATABASE=${PG_DB}
+      - POSTGRESQL_TIMEZONE=Europe/Berlin
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${PG_DB} -U $${PG_USER}" ]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - int-auth-net
+
+  auth-redis:
+    image: bitnami/redis:latest
+    restart: always
+    volumes:
+      - auth-redis-data:/bitnami/redis/data
+    environment:
+      - TZ=Europe/Berlin
+      - ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - int-auth-net
+
+  auth-server:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.3}
+    command: server
+    restart: always
+    ports:
+      - 9000:9000
+      - 9443:9443
+    expose:
+      - 9000
+      - 9443
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+      - AUTHENTIK_REDIS__HOST=auth-redis
+      - AUTHENTIK_POSTGRESQL__HOST=auth-postgres-db
+      - AUTHENTIK_POSTGRESQL__USER=${PG_USER}
+      - AUTHENTIK_POSTGRESQL__NAME=${PG_DB}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS:?database password required}
+    volumes:
+      - ./authentik-data/media:/media
+      - ./authentik-data/custom-templates:/templates
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.authentik.entrypoints=websecure
+      - traefik.http.routers.authentik.rule=Host(`${AUTH_DOMAIN:?a FQDN needs to be set}`) || HostRegexp(`{subdomain:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?}.${ROOT_DOMAIN:?the root domain needs to be set}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.tls=true
+      - traefik.http.routers.authentik.tls.certresolver=production
+      - traefik.http.routers.authentik.service=authentik
+      - traefik.http.services.authentik.loadbalancer.server.port=9000
+    depends_on:
+      auth-postgres-db:
+        condition: service_healthy
+      auth-redis:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
+      - int-auth-net
+
+  auth-worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.3}
+    command: worker
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - TZ=Europe/Berlin
+      - AUTHENTIK_REDIS__HOST=auth-redis
+      - AUTHENTIK_POSTGRESQL__HOST=auth-postgres-db
+      - AUTHENTIK_POSTGRESQL__USER=${PG_USER}
+      - AUTHENTIK_POSTGRESQL__NAME=${PG_DB}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS:?database password required}
+    volumes:
+      - ./authentik-data/certs:/certs
+      - ./authentik-data/media:/media
+      - ./authentik-data/custom-templates:/templates
+    depends_on:
+      auth-postgres-db:
+        condition: service_healthy
+      auth-redis:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
+      - int-auth-net
+
+  socket-proxy-auth:
+    # SET THIS IN THE Authentik ADMIN WEB INTERFACE
+    # System --> Outpost Integrations --> Create
+    # Name: socket-proxy-authentik
+    # Local: FALSE 
+    # Docker URL: http://traefik-authentik-socket-proxy-auth:2375
+    # TLS Verification Certificate: EMPTY
+    # TLS Authentication Certificate/SSH Keypair: EMPTY
+    # CHANGE THE OUTPOST UNDER
+    # Applications --> Outposts --> Edit the existing one
+    # Integration: socket-proxy-authentik
+    image: lscr.io/linuxserver/socket-proxy:latest
+    restart: always
+    environment:
+      - CONTAINERS=1
+      - IMAGES=1
+      - INFO=1
+      - PING=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - int-auth-net
+
+volumes:
+  auth-postgres-db-data:
+  auth-redis-data:
+
+networks:
+  default:
+    external: true
+    name: int-docker-net
+  int-auth-net:
+    driver: bridge
+    attachable: false
+    name: int-auth-net

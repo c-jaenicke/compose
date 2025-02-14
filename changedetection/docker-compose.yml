@@ -1,22 +1,26 @@
 # CHANGEDETECTION DOCKER COMPOSE
 # https://github.com/dgtlmoon/changedetection.io
-# Changedetection
 
 services:
-  changedetection:
-    container_name: changedetection
-    hostname: changedetection
+  app:
     image: dgtlmoon/changedetection.io
     restart: unless-stopped
     expose:
       - 5000
     volumes:
-      - changedetection-data:/datastore
+      - app-data:/datastore
     environment:
       - TZ=Europe/Berlin
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
 
 volumes:
-  changedetection-data:
+  app-data:
 
 networks:
   default:

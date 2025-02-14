@@ -1,15 +1,11 @@
 # compose
 
-Collection of compose files
-
-Most of the compose files use [docker volumes (docker.com)](https://docs.docker.com/storage/volumes/) to store
-persistent data for containers. Only configuration files are binding to the host.
+Collection of compose files.
 
 ## int-docker-net
 
-All the compose files use a default network called `int-docker-net`.
-
-This references an externally created docker network, created using:
+All the Compose files use a default network called `int-docker-net`.
+This references an externally created Docker network, which can be created using the following command:
 
 ```bash
 docker network create int-docker-net
@@ -17,50 +13,50 @@ docker network create int-docker-net
 
 ## Reverse Proxy
 
-The containers get exposed using [traefik Proxy (traefik.io)](https://traefik.io/traefik/).
-
-Only the traefik and portainer services bind directly to the host machine.
+The containers are exposed using [Traefik Proxy (traefik.io)](https://traefik.io/traefik/).
+Only the Traefik service should be bound directly to the host machine.
 
 ## Treafik Labels
 
-A list of commonly used labels to expose a service using treafik. These labels are appended to the service configuration
-in the `docker-compose.yml`.
+A list of commonly used labels to expose a service using Traefik. These labels are added to the service configuration in
+the `docker-compose.yml` file.
 
 ```yaml
-    labels:
-      # enable treafik discovery for this service
-      - traefik.enable=true
-      # set entrypoint to http
-      #  - traefik.http.routers.<NAME>.entrypoints=web
-      # set entrypoint to https
-      - traefik.http.routers.<NAME>.entrypoints=websecure
-      # bind to a domain or multiple ones using (`DOMAIN`, `DOMAIN2`)
-      - traefik.http.routers.<NAME>.rule=Host(`<DOMAIN>`)
-      # enable tls
-      - traefik.http.routers.<NAME>.tls=true
-      # set cert server
-      - traefik.http.routers.<NAME>.tls.certresolver=production
-    # enable authelia for service, make sure service is in authelia config
-    #  - traefik.http.routers.<NAME>.middlewares=authelia@file
+labels:
+  # Enable Traefik discovery for this service
+  - traefik.enable=true
+  # Set entrypoint to HTTP
+  #  - traefik.http.routers.<NAME>.entrypoints=web
+  # Set entrypoint to HTTPS
+  - traefik.http.routers.<NAME>.entrypoints=websecure
+  # Bind to a domain or multiple domains (e.g., `DOMAIN`, `DOMAIN2`)
+  - traefik.http.routers.<NAME>.rule=Host(`<DOMAIN>`)
+  # Enable TLS
+  - traefik.http.routers.<NAME>.tls=true
+  # Set certificate resolver
+  - traefik.http.routers.<NAME>.tls.certresolver=production
+  # Enable Authentik protection for the service
+  #  - traefik.http.routers.<NAME>.middlewares=authentik@file
 ```
 
-This line `- traefik.http.routers.changedetection.middlewares=authelia@file` references a middleware service authelia.
-See the `traefik/traefik.yml` file, under the section `# MIDDLEWARES` to see how it is configured.
+The line `- traefik.http.routers.changedetection.middlewares=authentik@file` references a middleware service, Authentik.
+See the `traefik/traefik.yml` file under the `# MIDDLEWARES` section to see how it is configured.
 
 ## Logging
 
 ### Disable
 
-Disable logging for a container in the docker compose file.
+To disable logging for a container in the Docker Compose file, use the following configuration:
 
 ```yaml
     logging:
-      driver: none
+      driver: "none"
 ```
 
 ### Limit
 
-<https://docs.docker.com/compose/compose-file/compose-file-v3/#logging>
+For more details, refer to
+the [official Docker documentation](https://docs.docker.com/compose/compose-file/compose-file-v3/#logging).
 
 ```yaml
     logging:
@@ -69,15 +65,15 @@ Disable logging for a container in the docker compose file.
         max-file: "10"
 ```
 
-*The example shown above would store log files until they reach a max-size of 200kB,
-and then rotate them. The amount of individual log files stored is specified by the max-file value.
-As logs grow beyond the max limits, older log files are removed to allow storage of new logs.*
+The example above configures log rotation: it stores log files until they reach a maximum size of 200kB, after which
+they are rotated. The max-file option specifies the maximum number of log files to retain. As logs grow beyond the
+specified limits, older log files are removed to make space for new logs.
 
 ### Delete Logs
 
-**Deletes all Logs for this container. Non-reversible. Can break logs.**
+**This deletes all logs for this container. This action is non-reversible and may disrupt logging functionality.**
 
-```shell
+```shell 
 truncate -s 0 $(docker inspect --format='{{.LogPath}}' <container_name_or_id>)
 ```
 
@@ -99,14 +95,14 @@ docker compose logs -f <container name>
         tag: <service-name>
 ```
 
-### Using Json File
+### Using a File
 
 ```yaml
     logging:
-      driver: json-file
+      driver: "json-file"
       options:
-        max-size: "200k"
-        max-file: "10"
+        max-size: "10m"
+        max-file: "3"
 ```
 
 ## Update Running Compose stack

@@ -1,4 +1,4 @@
-# <SERIVCE NAME> COMPOSE
+# <SERVICE NAME> COMPOSE
 # <LINK TO SERVICE SOURCE OR DOCUMENTATION>
 # <LIST OF SERVICES IN COMPOSE (e.g. Traefik, Prometheus, MariaDB)>
 
@@ -10,29 +10,57 @@ services:
     restart: unless-stopped
     # map port in container to port on host. will expose port externally
     ports:
-      - "<port on host>:<port in container>"
+      - "<PORT ON HOST>:<PORT IN CONTAINER>"
       # use following if port should only be available on localhost
-      - "127.0.0.1:<port on host>:<port in container>"
+      - "127.0.0.1:<PORT ON HOST>:<PORT IN CONTAINER>"
     # expose port in container to other containers
     expose:
       - <PORT>
     volumes:
-      - <VOLUME or PATH>:<MOUNT POINT IN CONTAINER>
+      - <VOLUME OR PATH>:<MOUNT POINT IN CONTAINER>
     environment:
-      - TZ=Europe/Berlin
-    # traefik labels here
+      - TZ=<TIMEZONE>
+    # traefik labels here (if needed)
     labels:
-      - <LABEL>
+      - "<LABEL>"
     depends_on:
-      - <SERVICE NAME>
+      - <DEPENDENT SERVICE NAME>
     healthcheck:
-      <TEST HERE>
+      test: ["CMD-SHELL", "<HEALTHCHECK COMMAND>"]
     logging:
-      <logging options>
+      driver: "json-file"
+      options:
+        max-size: "<MAX SIZE>"
+        max-file: "<MAX FILE>"
 
-# save data for service in a volume
+  <ANOTHER SERVICE NAME>:
+    container_name: <CONTAINER NAME>
+    hostname: <CONTAINER NAME>
+    image: <IMAGE>
+    restart: unless-stopped
+    ports:
+      - "<PORT ON HOST>:<PORT IN CONTAINER>"
+    expose:
+      - <PORT>
+    volumes:
+      - <VOLUME OR PATH>:<MOUNT POINT IN CONTAINER>
+    environment:
+      - TZ=<TIMEZONE>
+    labels:
+      - "<LABEL>"
+    depends_on:
+      - <DEPENDENT SERVICE NAME>
+    healthcheck:
+      test: ["CMD-SHELL", "<HEALTHCHECK COMMAND>"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "<MAX SIZE>"
+        max-file: "<MAX FILE>"
+
 volumes:
   <SERVICE NAME>-data:
+    driver: local
 
 # join existing network for all containers
 networks:

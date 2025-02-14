@@ -1,25 +1,32 @@
-# PICOSHARE COMPOSE
+# PICOSHARE DOCKER COMPOSE CONFIGURATION
 # https://github.com/mtlynch/picoshare
-# Picoshare
 
 services:
   app:
-    container_name: picoshare
-    image: mtlynch/picoshare
+    image: mtlynch/picoshare:1.4.1
     restart: unless-stopped
     expose:
       - 4001
     volumes:
-      - picoshare-data:/data
+      - app-data:/data
+    command: -db /data/store.db -vacuum true
+    env_file:
+      - .env
     environment:
-      - TZ='Europe/Berlin'
+      - TZ=Europe/Berlin
       - PORT=4001
       - PS_BEHIND_PROXY=true
-      - PS_SHARED_SECRET=<SET PASSPHRASE FOR ADMIN LOGIN>
-    command: -db /data/store.db -vacuum true
+      - PS_SHARED_SECRET=${SHARED_SECRET}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - default
 
 volumes:
-  picoshare-data:
+  app-data:
 
 networks:
   default:

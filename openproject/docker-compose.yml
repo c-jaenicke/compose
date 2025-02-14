@@ -3,9 +3,7 @@
 # OpenProject
 
 services:
-  openproject:
-    container_name: openproject
-    hostname: openproject
+  app:
     image: openproject/community:12
     restart: unless-stopped
     expose:

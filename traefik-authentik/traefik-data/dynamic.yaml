@@ -1,0 +1,26 @@
+###########################################################################
+# TRAEFIK DYNAMIC CONFIGURATION FILE
+# https://doc.traefik.io/traefik/
+###########################################################################
+
+http:
+  # Servers Transports
+  serversTransports:
+    insecure-transport:
+      insecureSkipVerify: true # Useful when having NGINX behind Traefik
+
+  routers:
+    EXAMPLE_ROUTER_NAME:
+      rule: "Host(`DOMAIN_FOR_SERVICE_HERE`)"
+      entryPoints:
+        - "websecure"
+      service: "EXAMPLE_SERVICE_NAME"
+      tls:
+        certResolver: "production"
+
+  services:
+    EXAMPLE_SERVICE_NAME:
+      loadBalancer:
+        servers:
+          - url: "EXAMPLE_CONTAINER_HOSTNAME"
+        serversTransport: "insecure-transport"
