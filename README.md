@@ -60,9 +60,10 @@ the [official Docker documentation](https://docs.docker.com/compose/compose-file
 
 ```yaml
     logging:
+      driver: "json-file"
       options:
-        max-size: "200k"
-        max-file: "10"
+        max-size: "10m"
+        max-file: "3"
 ```
 
 The example above configures log rotation: it stores log files until they reach a maximum size of 200kB, after which
@@ -93,16 +94,6 @@ docker compose logs -f <container name>
         # port is standard is a gelf udp note, created in web ui
         gelf-address: "udp://172.19.200.1:12201"
         tag: <service-name>
-```
-
-### Using a File
-
-```yaml
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 ```
 
 ## Update Running Compose stack

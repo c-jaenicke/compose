@@ -1,0 +1,35 @@
+# SATISFACTORY SERVER COMPOSE
+# https://hub.docker.com/r/wolveix/satisfactory-server
+# satisfactory-server
+
+services:
+  server:
+    image: wolveix/satisfactory-server:latest
+    restart: unless-stopped
+    ports:
+      - "7777:7777/udp"
+      - "7777:7777/tcp"
+    volumes:
+      - ./config:/config
+    environment:
+      - MAXPLAYERS=2
+      - PGID=1000
+      - PUID=1000
+      - STEAMBETA=false
+      - AUTOSAVENUM=5
+    deploy:
+      resources:
+        limits:
+          memory: 32G
+        reservations:
+          memory: 8G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    external: true
+    name: int-docker-net
