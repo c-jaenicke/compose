@@ -6,13 +6,13 @@
 
 services:
   proxy:
-    image: traefik:v3.3.2
+    image: traefik:latest
     restart: always
     ports:
       - 80:80
       - 443:443
       # PORT 8080 FOR UNSECURED DASHBOARD!
-      - 8080:8080
+      # - 8080:8080
     volumes:
       - ./proxy-data/certs:/etc/traefik/certs
       - ./proxy-data:/etc/traefik:ro
@@ -90,7 +90,7 @@ services:
       - int-auth-net
 
   auth-server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.3}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.3}
     command: server
     restart: always
     ports:
@@ -133,7 +133,7 @@ services:
       - int-auth-net
 
   auth-worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.12.3}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.2.3}
     command: worker
     restart: always
     env_file:
